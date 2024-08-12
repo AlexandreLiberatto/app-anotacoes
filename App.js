@@ -7,8 +7,32 @@ export default function App() {
   const [estado, setarEstado] = useState('leitura');
   const [anotacao, setarAnotacao] = useState('');
 
+  useEffect(() => {
+
+   //quando digitar algo...
+
+   (async () => {
+     try {
+        const anotacaoLeitura = await AsyncStorange.getItem('anotacao');
+        setarAnotacao(anotacaoLeitura);
+     } catch (error) {}
+       
+   })();
+
+  },[]);
+
+  setData = async() => {
+    try {
+      await AsyncStorange.setItem('anotacao', anotacao);
+    } catch (error) {
+      
+    }
+    alert('Sua anotação foi salva!');
+  }
+
   function atualizarTexto() {
     setarEstado('leitura');
+    setData();
   }
 
 
@@ -43,7 +67,7 @@ export default function App() {
     {/* <StatusBar style='light' /> */}
     <View style={styles.header}><Text style={{textAlign:'center', color:'white',fontSize:20}}>Aplicativo Anotações</Text></View>
 
-    <TextInput onChangeText={(text)=> setarAnotacao(text)} style={{padding:20,height:300,textAlignVertical:'top'}}  multiline={true} numberOfLines={5} value={anotacao}></TextInput>
+    <TextInput autoFocus={true} onChangeText={(text)=> setarAnotacao(text)} style={{padding:20,height:300,textAlignVertical:'top'}}  multiline={true} numberOfLines={5} value={anotacao}></TextInput>
 
     <TouchableOpacity onPress={()=> atualizarTexto()} style={styles.btnSalvar}><Text style={{textAlign:'center',color:'white',fontSize:16}}>Salvar</Text></TouchableOpacity>
     
