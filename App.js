@@ -1,11 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, AsyncStorange } from 'react-native';
 
 export default function App() {
 
   const [estado, setarEstado] = useState('leitura');
-  const [anotacao, setarAnotacao] = useState('Minha anotação');
+  const [anotacao, setarAnotacao] = useState('');
+
+  function atualizarTexto() {
+    setarEstado('leitura');
+  }
 
 
   if(estado == 'leitura') {
@@ -14,10 +18,21 @@ export default function App() {
     <View style={{flex:1}}>
       {/* <StatusBar style='light' /> */}
       <View style={styles.header}><Text style={{textAlign:'center', color:'white',fontSize:20}}>Aplicativo Anotações ✏️</Text></View>
-
-      <View style={{padding:20}}><Text style={styles.anotacao}>{anotacao}</Text></View>
-
-      <TouchableOpacity onPress={()=> setarEstado('atualizando')} style={styles.btnAnotacao}><Text style={styles.btnAnotacaoTexto}>+</Text></TouchableOpacity>
+      {
+        (anotacao != '')?
+        <View style={{padding:20}}><Text style={styles.anotacao}>{anotacao}</Text></View>
+        :
+        <View style={{padding:20}}><Text style={{opacity:0.3}}>Nenhuma anotação encontrada :(</Text></View>
+      }
+      <TouchableOpacity onPress={()=> setarEstado('atualizando')} 
+      style={styles.btnAnotacao}>
+        {
+        (anotacao == "")?
+         <Text style={styles.btnAnotacaoTexto}>+</Text>
+        :
+         <Text style={{fontSize:12,color:'white',textAlign:'center', marginTop:16}}>Editar</Text>
+        }
+      </TouchableOpacity>
       
     </View>
   );
@@ -30,7 +45,7 @@ export default function App() {
 
     <TextInput onChangeText={(text)=> setarAnotacao(text)} style={{padding:20,height:300,textAlignVertical:'top'}}  multiline={true} numberOfLines={5} value={anotacao}></TextInput>
 
-    <TouchableOpacity onPress={()=> setarEstado('leitura')} style={styles.btnSalvar}><Text style={{textAlign:'center',color:'white',fontSize:16}}>Salvar</Text></TouchableOpacity>
+    <TouchableOpacity onPress={()=> atualizarTexto()} style={styles.btnSalvar}><Text style={{textAlign:'center',color:'white',fontSize:16}}>Salvar</Text></TouchableOpacity>
     
     </View>
   );
